@@ -19,17 +19,17 @@ const production = process.env.NODE_ENV === `production`;
 export const configs: IConfig = {
     apiurl: (() => {
         if (production) {
-            return `https://liveurl.sample.com`;
+            return `https://ifunza.herokuapp.com`;
         }
 
         return `http://127.0.0.1:5000`;
     })(),
     mongouri: (() => {
         if (production) {
-            return `mongodb-remote-url`;
+            return `mongodb+srv://ifunza-user:25812345Dan@ifunza-cluster-9pkfp.mongodb.net/test?retryWrites=true&w=majority`;
         }
 
-        return `mongodb://username:password@127.0.0.1:27017/database-name`;
+        return `mongodb://danny:25812345Dan@127.0.0.1:27017/ifunzadb`;
     })(),
     jwtsecret: '6=+_/][{dn@#^nmsdv-',
     mail: {

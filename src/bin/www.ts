@@ -1,22 +1,22 @@
 import * as ejs from 'ejs';
 import * as fastify from 'fastify';
-import { FastifyReply, FastifyRequest } from 'fastify';
 import * as cookie from 'fastify-cookie';
 import * as cors from 'fastify-cors';
 import * as servefavicon from 'fastify-favicon';
 import * as staticassets from 'fastify-static';
 import { IncomingMessage, Server, ServerResponse } from 'http';
 import { join, resolve } from 'path';
-import * as view from 'point-of-view';
+import * as viewengine from 'point-of-view';
 import config from '../configs';
 import docs from '../docs';
 import mail from '../libraries/Email';
 import database from '../models';
 import apiresources from '../routes/api-resources';
 import authentication from '../routes/authentication';
-import token from '../utils/Token';
-import template from '../utils/Template';
+import viewroutes from '../routes/view-routes';
 import statuscodes from '../utils/Statuscodes';
+import template from '../utils/Template';
+import token from '../utils/Token';
 
 /**
  * Application server instance.
@@ -44,8 +44,8 @@ export default class App {
     private port: number | string;
 
     constructor() {
-        this.port = process.env.PORT || 5000;
-        this.app = fastify({ ignoreTrailingSlash: true, logger: { level: 'warn' } });
+        this.port = process.env.PORT || 3000;
+        this.app = fastify({ ignoreTrailingSlash: true, logger: { prettyPrint: true, level: 'fatal' } });
         this.config();
     }
 
@@ -75,20 +75,6 @@ export default class App {
 
         this.app.register(servefavicon, { path: join(__dirname, '..', '..') });
 
-        this.app.register(staticassets, {
-            root: join(__dirname, '..', '..', 'public'),
-            prefix: '/',
-        });
-
-        this.app.register(view, {
-            engine: { ejs },
-            templates: join(__dirname, '..', '..', 'views'),
-            options: {
-                filename: resolve(__dirname, '..', '..', 'views'),
-            },
-            includeViewExtension: true,
-        });
-
         this.app.register(config);
 
         this.app.register(mail);
@@ -115,14 +101,27 @@ export default class App {
             done();
         });
 
-        this.app.all('/', (req: FastifyRequest<{}>, res: FastifyReply<{}>) => {
-            res.redirect(301, '/docs');
-        });
-
         this.app.register(docs);
 
         this.app.register(authentication, { prefix: '/auth' });
 
         this.app.register(apiresources, { prefix: '/api' });
+
+        this.app.register(staticassets, {
+            root: join(__dirname, '..', '..', 'public'),
+            prefix: '/',
+            wildcard: false,
+        });
+
+        this.app.register(viewengine, {
+            engine: { ejs },
+            templates: join(__dirname, '..', '..', 'views'),
+            options: {
+                filename: resolve(__dirname, '..', '..', 'views'),
+            },
+            includeViewExtension: true,
+        });
+
+        this.app.register(viewroutes, { prefix: '/' });
     }
 }

@@ -46,6 +46,7 @@
         "html-minifier": "^4.0.0",
         "mongoose": "^5.5.11",
         "nodemailer": "^6.1.0",
+        "pino-pretty": "^3.1.0",
         "point-of-view": "^2.3.0",
         "typescript": "^3.5.1"
     },
