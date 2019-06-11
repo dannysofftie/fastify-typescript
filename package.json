@@ -1,7 +1,7 @@
 {
-    "name": "sams-project-management",
+    "name": "fastify-typescript",
     "version": "0.0.1",
-    "description": "Project management application, for road construction works",
+    "description": "Template to quick start your API development using Fastify and TypeScript",
     "main": "dist/index.js",
     "scripts": {
         "dev": "ts-node-dev --respawn --no-notify src/index.ts",
@@ -17,19 +17,19 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+ssh://git@bitbucket.org:oratechsolutions/sams-app-server.git"
+        "url": "git+ssh://git@github.com:dannysofftie/fastify-typescript.git"
     },
     "keywords": [
-        "sams",
-        "project-management",
-        "road-construction"
+        "fastify",
+        "fastify-template",
+        "nodejs-api-development"
     ],
     "author": "Danny Sofftie",
     "license": "GPL-3.0",
     "bugs": {
-        "url": "https://bitbucket.org/oratechsolutions/sams-app-server/issues"
+        "url": "https://github.com/dannysofftie/fastify-typescript/issues"
     },
-    "homepage": "https://bitbucket.org/oratechsolutions/sams-app-server#readme",
+    "homepage": "https://github.com/dannysofftie/fastify-typescript#readme",
     "dependencies": {
         "axios": "^0.19.0",
         "bcrypt": "^3.0.6",
