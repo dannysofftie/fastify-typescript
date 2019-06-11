@@ -1,0 +1,10 @@
+{
+    "type": "node",
+    "request": "launch",
+    "name": "Debug jest test",
+    "preLaunchTask": "npm run build",
+    "program": "${workspaceRoot}/node_modules/.bin/jest",
+    "args": ["--config", "${workspaceRoot}/jest.config.js", "--runInBand", "${relativeFile}"],
+    "sourceMaps": true,
+    "outFiles": ["${workspaceRoot}/dist/**/*"]
+}
