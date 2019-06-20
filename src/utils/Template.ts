@@ -1,12 +1,10 @@
 import * as ejs from 'ejs';
-import { FastifyInstance } from 'fastify';
-import * as fp from 'fastify-plugin';
 import { readFileSync } from 'fs';
 import { minify } from 'html-minifier';
 import { join } from 'path';
 
 interface ITemplatePaths {
-    template: 'sample-template';
+    template: 'account-creation' | 'reset-password';
 }
 
 export interface ITemplate {
@@ -21,22 +19,23 @@ export interface ITemplate {
 const rootPath = join(__dirname, '..', '..', 'views', 'email-templates/');
 
 const loadTemplate = {
-    'sample-template': 'accounts/password-reset.ejs',
+    'account-creation': 'accounts/new-account.ejs',
+    'reset-password': 'accounts/password-reset.ejs',
 };
 
-export default fp((app: FastifyInstance, opts: {}, done: (err?: Error) => void) => {
-    const utility: ITemplate = {
-        compile: (template: ITemplatePaths, data?: any) => {
-            const text = readFileSync(rootPath + loadTemplate[template.template], 'utf-8');
+export interface ICompileTemplate {
+    /**
+     * Compile .ejs file, specified path and data
+     *
+     * @memberof ITemplate
+     */
+    compileEjs: (template: ITemplatePaths, data?: any) => string;
+}
 
-            const html = ejs.compile(text)(data);
+export const compileEjs = (template: ITemplatePaths, data?: any) => {
+    const text = readFileSync(rootPath + loadTemplate[template.template], 'utf-8');
 
-            return minify(html, { collapseWhitespace: true });
-        },
-    };
+    const html = ejs.compile(text)(data);
 
-    app.decorate('template', utility);
-
-    // pass execution to the next middleware in fastify stack
-    done();
-});
+    return minify(html, { collapseWhitespace: true });
+};
