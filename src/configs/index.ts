@@ -2,8 +2,9 @@ import { FastifyInstance } from 'fastify';
 import * as fp from 'fastify-plugin';
 import { IncomingMessage, Server, ServerResponse } from 'http';
 import { IEmailConfigs } from '../libraries/Email';
+import { config } from 'dotenv';
 
-require('dotenv').config();
+config();
 
 export interface IConfig {
     apiurl: string;
@@ -19,19 +20,19 @@ const production = process.env.NODE_ENV === `production`;
 export const configs: IConfig = {
     apiurl: (() => {
         if (production) {
-            return `https://liveurl.sample.com`;
+            return process.env.API_PROD_URL;
         }
 
-        return `http://127.0.0.1:5000`;
+        return process.env.API_LOCAL_URL;
     })(),
     mongouri: (() => {
         if (production) {
-            return `mongodb-remote-url`;
+            return process.env.MONGO_PROD_URL;
         }
 
-        return `mongodb://username:password@127.0.0.1:27017/database-name`;
+        return `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:27017/${process.env.MONGO_DATABASE}`;
     })(),
-    jwtsecret: '6=+_/][{dn@#^nmsdv-',
+    jwtsecret: process.env.JWT_SECRET_KEY,
     mail: {
         host: process.env.APP_EMAIL_HOST,
         port: process.env.APP_EMAIL_HOST.includes('gmail') || process.env.APP_EMAIL_HOST.includes('zoho') ? 465 : 25,

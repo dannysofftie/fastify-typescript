@@ -74,7 +74,7 @@ export default (app: FastifyInstance<Server, IncomingMessage, ServerResponse>, o
                 tags: ['api'],
                 description: 'Create a new project, with all the fields marked with * as required.',
                 response: {
-                    ...app.statuscodes,
+                    ...app.utils.statuscodes,
                 },
                 body: {
                     type: 'object',
@@ -103,7 +103,7 @@ export default (app: FastifyInstance<Server, IncomingMessage, ServerResponse>, o
                 tags: ['api'],
                 description: 'Update route as put request.',
                 response: {
-                    ...app.statuscodes,
+                    ...app.utils.statuscodes,
                 },
                 body: {
                     type: 'object',
@@ -143,7 +143,7 @@ export default (app: FastifyInstance<Server, IncomingMessage, ServerResponse>, o
                     },
                 },
                 response: {
-                    ...app.statuscodes,
+                    ...app.utils.statuscodes,
                 },
                 summary: 'Remove an item from a collection',
                 security: [

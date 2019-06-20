@@ -16,7 +16,7 @@ const models: IDatabase = {
     Product,
 };
 
-export default fp(async (app: FastifyInstance<Server, IncomingMessage, ServerResponse>, opts: { uri: string }, done: (err?: Error) => void) => {
+export default fp(async (app: FastifyInstance<Server, IncomingMessage, ServerResponse>, opts: {}, done: (err?: Error) => void) => {
     mongoose.connection.on('connected', () => console.log('Mongo connected successfully'));
     mongoose.connection.on('error', console.log);
 

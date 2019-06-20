@@ -1,22 +1,19 @@
 import * as ejs from 'ejs';
 import * as fastify from 'fastify';
-import { FastifyReply, FastifyRequest } from 'fastify';
 import * as cookie from 'fastify-cookie';
 import * as cors from 'fastify-cors';
 import * as servefavicon from 'fastify-favicon';
 import * as staticassets from 'fastify-static';
 import { IncomingMessage, Server, ServerResponse } from 'http';
 import { join, resolve } from 'path';
-import * as view from 'point-of-view';
+import * as viewengine from 'point-of-view';
 import config from '../configs';
 import docs from '../docs';
-import mail from '../libraries/Email';
 import database from '../models';
 import apiresources from '../routes/api-resources';
 import authentication from '../routes/authentication';
-import token from '../utils/Token';
-import template from '../utils/Template';
-import statuscodes from '../utils/Statuscodes';
+import utilities from '../utils';
+import * as servestatic from 'serve-static';
 
 /**
  * Application server instance.
@@ -45,7 +42,7 @@ export default class App {
 
     constructor() {
         this.port = process.env.PORT || 5000;
-        this.app = fastify({ ignoreTrailingSlash: true, logger: { level: 'warn' } });
+        this.app = fastify({ ignoreTrailingSlash: true, logger: { level: 'fatal' } });
         this.config();
     }
 
@@ -75,31 +72,11 @@ export default class App {
 
         this.app.register(servefavicon, { path: join(__dirname, '..', '..') });
 
-        this.app.register(staticassets, {
-            root: join(__dirname, '..', '..', 'public'),
-            prefix: '/',
-        });
-
-        this.app.register(view, {
-            engine: { ejs },
-            templates: join(__dirname, '..', '..', 'views'),
-            options: {
-                filename: resolve(__dirname, '..', '..', 'views'),
-            },
-            includeViewExtension: true,
-        });
-
         this.app.register(config);
-
-        this.app.register(mail);
-
-        this.app.register(template);
-
-        this.app.register(statuscodes);
 
         this.app.register(database);
 
-        this.app.register(token);
+        this.app.register(utilities);
 
         this.app.register(cookie);
 
@@ -115,14 +92,28 @@ export default class App {
             done();
         });
 
-        this.app.all('/', (req: FastifyRequest<{}>, res: FastifyReply<{}>) => {
-            res.redirect(301, '/docs');
-        });
-
         this.app.register(docs);
 
         this.app.register(authentication, { prefix: '/auth' });
 
         this.app.register(apiresources, { prefix: '/api' });
+
+        this.app.register(staticassets, {
+            root: join(__dirname, '..', '..', 'public'),
+            prefix: '/',
+            wildcard: false,
+        });
+
+        // @ts-ignore
+        this.app.use('/uploads', servestatic(join(__dirname, '..', '..', 'uploads')));
+
+        this.app.register(viewengine, {
+            engine: { ejs },
+            templates: join(__dirname, '..', '..', 'views'),
+            options: {
+                filename: resolve(__dirname, '..', '..', 'views'),
+            },
+            includeViewExtension: true,
+        });
     }
 }

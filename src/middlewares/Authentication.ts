@@ -10,7 +10,7 @@ export function determineAccountAndUser(app: FastifyInstance, req: FastifyReques
     try {
         const token = auth.split(' ')[1];
 
-        return app.token.verify(token);
+        return app.utils.verify(token);
     } catch {
         return null;
     }
@@ -33,7 +33,7 @@ export function protectUserRoute(req: FastifyRequest<{}>, res: FastifyReply<{}>,
 
     const { account, email, id } = determineAccountAndUser(this, req);
 
-    if (account !== 'usertype1') {
+    if (account !== 'account1') {
         return res.status(403).send({ error: 'forbidden', message: 'Invalid credentials in authentication token' });
     }
 

@@ -3,15 +3,6 @@ import { Document, HookNextFunction, model, Schema } from 'mongoose';
 export interface IProject {
     title: string;
     description: string;
-    slug: string;
-    engineer: Schema.Types.ObjectId;
-    client: Schema.Types.ObjectId;
-    personnels: [
-        {
-            user: string;
-            role: string;
-        }
-    ];
     createdat: Date | string;
     updatedat: Date | number | string;
 }
@@ -25,23 +16,6 @@ const project = new Schema<IProjectDocument>({
     description: {
         type: String,
     },
-    slug: {
-        type: String,
-    },
-    engineer: {
-        type: Schema.Types.ObjectId,
-    },
-    client: {
-        type: Schema.Types.ObjectId,
-    },
-    personnels: [
-        {
-            user: {
-                type: Schema.Types.ObjectId,
-            },
-            role: { type: String },
-        },
-    ],
     createdat: {
         type: Date,
         default: Date.now,

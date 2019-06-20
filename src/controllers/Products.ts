@@ -23,10 +23,6 @@ export default class Prouducts extends Controller {
         throw new Error('Method not implemented');
     }
 
-    public async authenticate() {
-        throw new Error('Method not impelemented');
-    }
-
     /**
      * Get user by token, currently logged in user
      *
@@ -35,15 +31,5 @@ export default class Prouducts extends Controller {
      */
     public async getOneItem() {
         throw new Error('Method not implemeted');
-    }
-
-    /**
-     * Reset user password, to a an auto-generated password
-     *
-     * @returns
-     * @memberof Platformusers
-     */
-    public async resetUserPassword() {
-        throw new Error('Method not implemented');
     }
 }
