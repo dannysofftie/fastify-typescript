@@ -9,13 +9,13 @@ export default fp((app: FastifyInstance<Server, IncomingMessage, ServerResponse>
         routePrefix: '/docs',
         swagger: {
             info: {
-                title: 'Project API Server',
-                description: 'Application server for built with Fastify, and TypeScript. Documented using Swagger UI.',
+                title: 'iFunza API server',
+                description: 'Responds to paths prefixed with either `api` or `auth`, other requests will be forwarded to UI router.',
                 version: '0.0.1',
             },
             externalDocs: {
-                url: 'https://live-server-url.net',
-                description: `Hosted on server x vps.`,
+                url: 'https://ifunza.oratech.co.ke',
+                description: `Hosted on  Oratech's high speed delivery server.`,
             },
             consumes: ['application/json'],
             produces: ['application/json'],
