@@ -1,8 +1,7 @@
-import * as fp from 'fastify-plugin';
-import { FastifyInstance } from 'fastify';
 import { ReadStream } from 'fs';
-import { createTransport, Transporter } from 'nodemailer';
 import { minify } from 'html-minifier';
+import { createTransport, Transporter } from 'nodemailer';
+import { configs } from '../configs';
 
 export interface IEmailOptions {
     recipients: string | string[];
@@ -105,8 +104,8 @@ class Email {
      * @memberof Email
      */
     private configs: IEmailConfigs;
-    constructor(configs: IEmailConfigs, opts: IEmailOptions) {
-        this.configs = configs;
+    constructor(config: IEmailConfigs, opts: IEmailOptions) {
+        this.configs = config;
         this.recipients = opts.recipients;
         this.message = opts.message;
         this.subject = opts.subject;
@@ -161,18 +160,9 @@ class Email {
 }
 
 export interface IEmail {
-    send: (emailopts: IEmailOptions) => Promise<any>;
+    sendEmail: (emailopts: IEmailOptions) => Promise<any>;
 }
 
-export default fp((app: FastifyInstance, opts: {}, done: (err?: Error) => void) => {
-    const mail: IEmail = {
-        send: async (emailopts: IEmailOptions) => {
-            return new Email({ ...app.config.mail }, emailopts).send();
-        },
-    };
-
-    app.decorate('mail', mail);
-
-    // pass execution to the next middleware in the stack
-    done();
-});
+export const sendEmail = async (emailopts: IEmailOptions) => {
+    return new Email({ ...configs.mail }, emailopts).send();
+};
